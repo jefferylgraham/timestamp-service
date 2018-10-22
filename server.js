@@ -32,8 +32,18 @@ app.get(
   },
   function(req, res) {
     var date = Date.parse(req.time);
-    if (typeof date === "number") {
-      res.json({ unix: req.time.getTime(), utc: req.time.toUTCString() });
+    var dateString = req.params.date_string;
+    //if date string use current timestamp
+    if (dateString === "") {
+      var now = new Date();
+      return res.json({ unix: now.getTime(), utc: now.toUTCString() });
+    }
+    //if date string is correctly formatted
+    else if (typeof date === "number") {
+      return res.json({
+        unix: req.time.getTime(),
+        utc: req.time.toUTCString()
+      });
     }
   }
 );
