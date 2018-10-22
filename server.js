@@ -38,6 +38,11 @@ app.get(
       var now = new Date();
       return res.json({ unix: now.getTime(), utc: now.toUTCString() });
     }
+    //date = number
+    if (typeof parseInt(dateString) === "number") {
+      var date = new Date(parseInt(dateString));
+      return res.json({ unix: date.getTime(), utc: date.toUTCString() });
+    }
     //if date string is correctly formatted
     else if (typeof date === "number") {
       return res.json({
