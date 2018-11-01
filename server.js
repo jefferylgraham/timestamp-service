@@ -23,33 +23,28 @@ app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
 
+//Timesatmp for empty date string
+app.get("/api/timestamp", function(req, res) {
+  var now = new Date();
+  return res.json({ unix: now.getTime(), utc: now.toUTCString() });
+});
+
 //Timestamp servive API
 app.get(
   "/api/timestamp/:date_string",
   function(req, res, next) {
-    req.time = new Date(req.params.date_string);
-    next();
+    var dateString = req.params.date_string;
+    if (Number(dateString)) {
+      req.time = new Date(Number(dateString));
+      next();
+    } else {
+      req.time = new Date(dateString);
+      next();
+    }
   },
   function(req, res) {
-    var date = Date.parse(req.time);
-    var dateString = req.params.date_string;
-    //if date string use current timestamp
-    if (dateString === "") {
-      var now = new Date();
-      return res.json({ unix: now.getTime(), utc: now.toUTCString() });
-    }
-    //date = number
-    if (typeof parseInt(dateString) === "number") {
-      var date = new Date(parseInt(dateString));
-      return res.json({ unix: date.getTime(), utc: date.toUTCString() });
-    }
-    //if date string is correctly formatted
-    else if (typeof date === "number") {
-      return res.json({
-        unix: req.time.getTime(),
-        utc: req.time.toUTCString()
-      });
-    }
+    var date = req.time;
+    return res.json({ unix: date.getTime(), utc: date.toUTCString() });
   }
 );
 
