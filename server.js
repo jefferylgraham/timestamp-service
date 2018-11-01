@@ -36,11 +36,10 @@ app.get(
     var dateString = req.params.date_string;
     if (Number(dateString)) {
       req.time = new Date(Number(dateString));
-      next();
     } else {
       req.time = new Date(dateString);
-      next();
     }
+    next();
   },
   function(req, res) {
     var date = req.time;
